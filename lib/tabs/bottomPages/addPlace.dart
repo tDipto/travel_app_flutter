@@ -11,7 +11,7 @@ class _AddPlaceState extends State<AddPlace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("add place"),
+      body: Text("জায়গা সংযুক্ত করুন "),
     );
   }
 }

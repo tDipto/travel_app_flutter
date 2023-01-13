@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Text(
-                      "Sign In",
+                      "সাইন ইন করুন",
                       style: TextStyle(fontSize: 22.sp, color: Colors.white),
                     ),
                   ],
@@ -105,12 +105,12 @@ class _LoginPageState extends State<LoginPage> {
                           height: 20.h,
                         ),
                         Text(
-                          "Welcome Buddy!",
+                          "ট্রাভেল আপে আপনাকে স্বাগতম",
                           style: TextStyle(
                               fontSize: 22.sp, color: Colors.greenAccent),
                         ),
                         Text(
-                          "Glad to see you back my buddy.",
+                          "আপনার পুনরায় ফিরে আসায় আমরা আনন্দিত!",
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xFFBBBBBB),
@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                     fontSize: 14.sp,
                                     color: const Color(0xFF414041),
                                   ),
-                                  labelText: 'EMAIL',
+                                  labelText: 'ইমেইল',
                                   labelStyle: TextStyle(
                                     fontSize: 15.sp,
                                     color: Colors.greenAccent,
@@ -222,12 +222,13 @@ class _LoginPageState extends State<LoginPage> {
                                 controller: _passwordController,
                                 // obscureText: _obscureText,
                                 decoration: InputDecoration(
-                                  hintText: "password must be 6 character",
+                                  hintText:
+                                      "পাসওয়ার্ড কমপক্ষে ৬ শব্দের হতে হবে ",
                                   hintStyle: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 10.sp,
                                     color: Color(0xFF414041),
                                   ),
-                                  labelText: 'PASSWORD',
+                                  labelText: 'পাসওয়ার্ড',
                                   labelStyle: TextStyle(
                                     fontSize: 15.sp,
                                     color: Colors.greenAccent,
@@ -277,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                   // ignore: sort_child_properties_last
                                   child: Text(
-                                    "Sign In",
+                                    "সাইন ইন করুন",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18.sp),
                                   ),
@@ -293,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                         Wrap(
                           children: [
                             Text(
-                              "Haven't an account?",
+                              "পূর্বের একাউন্ট নাই?",
                               style: TextStyle(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
@@ -302,7 +303,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             GestureDetector(
                               child: Text(
-                                " Sign Up",
+                                " রেজিস্টার করুন",
                                 style: TextStyle(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w600,

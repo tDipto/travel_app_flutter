@@ -38,14 +38,13 @@ class _SignupPageState extends State<SignupPage> {
             loading = true;
           });
         } else {
-          Fluttertoast.showToast(msg: "Something Wrong");
+          Fluttertoast.showToast(msg: "কিছু ভুল হয়েছে, পুনরায় চেষ্টা করুন!");
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          Fluttertoast.showToast(msg: "The password provided is too weak.");
+          Fluttertoast.showToast(msg: "আপনার পাসওয়ার্ড অনেক দুর্বল ");
         } else if (e.code == 'email-already-in-use') {
-          Fluttertoast.showToast(
-              msg: "The account already exists for that email.");
+          Fluttertoast.showToast(msg: "এই ইমেইলে একটি একাউন্ট রয়েছে");
         }
       } catch (e) {
         Fluttertoast.showToast(msg: "err");
@@ -74,7 +73,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                     Text(
-                      "Sign Up",
+                      "রেজিস্টার করুন",
                       style: TextStyle(fontSize: 22.sp, color: Colors.white),
                     ),
                   ],
@@ -102,12 +101,12 @@ class _SignupPageState extends State<SignupPage> {
                           height: 20.h,
                         ),
                         Text(
-                          "Join Us!",
+                          "আমাদের সাথে সংযুক্ত হউন",
                           style:
                               TextStyle(fontSize: 22.sp, color: Colors.amber),
                         ),
                         Text(
-                          "Glad to see you back my buddy.",
+                          "আপনার পুনরায় ফিরে আসায় আমরা আনন্দিত!",
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xFFBBBBBB),
@@ -182,7 +181,7 @@ class _SignupPageState extends State<SignupPage> {
                                     fontSize: 14.sp,
                                     color: const Color(0xFF414041),
                                   ),
-                                  labelText: 'EMAIL',
+                                  labelText: 'ইমেইল',
                                   labelStyle: TextStyle(
                                     fontSize: 15.sp,
                                     color: Colors.amber,
@@ -219,12 +218,13 @@ class _SignupPageState extends State<SignupPage> {
                                 controller: _passwordController,
                                 // obscureText: _obscureText,
                                 decoration: InputDecoration(
-                                  hintText: "password must be 6 character",
+                                  hintText:
+                                      "পাসওয়ার্ড কমপক্ষে ৬ শব্দের হতে হবে",
                                   hintStyle: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 10.sp,
                                     color: Color(0xFF414041),
                                   ),
-                                  labelText: 'PASSWORD',
+                                  labelText: 'পাসওয়ার্ড',
                                   labelStyle: TextStyle(
                                     fontSize: 15.sp,
                                     color: Colors.amber,
@@ -274,7 +274,7 @@ class _SignupPageState extends State<SignupPage> {
                                   },
                                   // ignore: sort_child_properties_last
                                   child: Text(
-                                    "Continue",
+                                    "চালিয়ে যান",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18.sp),
                                   ),
@@ -290,7 +290,7 @@ class _SignupPageState extends State<SignupPage> {
                         Wrap(
                           children: [
                             Text(
-                              "Have an account?",
+                              "পূর্বের একাউন্ট আছে?",
                               style: TextStyle(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
@@ -299,7 +299,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             GestureDetector(
                               child: Text(
-                                " Sign In",
+                                " সাইন ইন করুন",
                                 style: TextStyle(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w600,

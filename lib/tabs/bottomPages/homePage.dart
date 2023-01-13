@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                 enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(0)),
                     borderSide: BorderSide(color: Colors.grey)),
-                hintText: "Search Place here",
+                hintText: "জায়গা খুজুন ",
                 hintStyle: const TextStyle(fontSize: 15),
               ),
               // onTap: () => Navigator.push(

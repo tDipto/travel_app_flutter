@@ -44,7 +44,7 @@ class _UserFormState extends State<UserForm> {
   TextEditingController _dobController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
-  List<String> gender = ["Male", "Female", "Other"];
+  List<String> gender = ["পুরুষ", "নারী", "অন্যান্য"];
   bool loading = false;
 
   sendUserDataToDB() async {
@@ -65,7 +65,8 @@ class _UserFormState extends State<UserForm> {
       setState(() {
         loading = false;
       });
-    }).catchError((error) => print("something is wrong. $error"));
+    }).catchError(
+        (error) => print("কিছু সমস্যা হয়েছে, পুনরায় চেষ্টা করুন $error"));
   }
 
   @override
@@ -83,11 +84,11 @@ class _UserFormState extends State<UserForm> {
                   height: 20,
                 ),
                 const Text(
-                  "Submit the form to continue.",
+                  "সাবমিট করুন ",
                   style: TextStyle(fontSize: 22, color: Colors.amber),
                 ),
                 const Text(
-                  "We will not share your information with anyone.",
+                  "আপনার তথ্য সংরক্ষিত থাকবে",
                   style: TextStyle(
                     fontSize: 14,
                     color: Color(0xFFBBBBBB),
@@ -96,10 +97,9 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(
                   height: 15,
                 ),
+                myTextField("আপনার নাম", TextInputType.text, _nameController),
                 myTextField(
-                    "Enter your name", TextInputType.text, _nameController),
-                myTextField("Enter your phone number", TextInputType.number,
-                    _phoneController),
+                    "মোবাইল নাম্বার", TextInputType.number, _phoneController),
                 // TextField(
                 //   controller: _dobController,
                 //   readOnly: true,
@@ -115,7 +115,7 @@ class _UserFormState extends State<UserForm> {
                   controller: _genderController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: "Choose your gender",
+                    hintText: "লিঙ্গ নির্ধারণ করুন",
                     prefixIcon: DropdownButton<String>(
                       items: gender.map((String value) {
                         return DropdownMenuItem<String>(
@@ -132,8 +132,7 @@ class _UserFormState extends State<UserForm> {
                     ),
                   ),
                 ),
-                myTextField(
-                    "Enter your age", TextInputType.number, _ageController),
+                myTextField("আপনার বয়স ", TextInputType.number, _ageController),
 
                 SizedBox(
                   height: 50,
@@ -143,7 +142,7 @@ class _UserFormState extends State<UserForm> {
                 loading
                     ? Center(child: CircularProgressIndicator())
                     : Center(
-                        child: customButton("Continue", () async {
+                        child: customButton("চালিয়ে যান", () async {
                           setState(() {
                             loading = true;
                           });

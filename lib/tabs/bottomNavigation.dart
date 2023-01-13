@@ -45,17 +45,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "Home",
+            label: "হোম ",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_location_rounded), label: "Division"),
+              icon: Icon(Icons.add_location_rounded), label: "বিভাগ"),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_sharp),
-            label: "Add",
+            label: "সংযুক্ত করুন ",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: "Profile",
+            label: "প্রোফাইল ",
           ),
         ],
         onTap: (index) {
