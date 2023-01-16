@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/tabs/bottomNavigation.dart';
 // import 'package:travel_app/tabs/homePage.dart';
 
@@ -44,6 +48,7 @@ class _AddPlaceState extends State<AddPlace> {
   TextEditingController _divisonController = TextEditingController();
   TextEditingController _roadmapController = TextEditingController();
   TextEditingController _zillacontroller = TextEditingController();
+  String imageUrl = '';
 
   List<String> divison = [
     "ঢাকা",
@@ -143,6 +148,7 @@ class _AddPlaceState extends State<AddPlace> {
       "divison": _divisonController.text,
       "zilla": _zillacontroller.text,
       "roadmap": _roadmapController.text,
+      "img": imageUrl
     }).then((value) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => BottomNavigation()));
@@ -178,6 +184,45 @@ class _AddPlaceState extends State<AddPlace> {
                 //     color: Color(0xFFBBBBBB),
                 //   ),
                 // ),
+                IconButton(
+                  onPressed: () async {
+                    ImagePicker imagePicker = ImagePicker();
+                    XFile? file = await imagePicker.pickImage(
+                        source: ImageSource.gallery);
+                    print('${file?.path}');
+
+                    if (file == null) return;
+                    //Import dart:core
+                    String uniqueFileName =
+                        DateTime.now().millisecondsSinceEpoch.toString();
+
+                    /*Step 2: Upload to Firebase storage*/
+                    //Install firebase_storage
+                    //Import the library
+
+                    //Get a reference to storage root
+                    Reference referenceRoot = FirebaseStorage.instance.ref();
+                    Reference referenceDirImages =
+                        referenceRoot.child('addPlaceImages');
+
+                    //Create a reference for the image to be stored
+                    Reference referenceImageToUpload =
+                        referenceDirImages.child(uniqueFileName);
+
+                    //Handle errors/success
+                    try {
+                      //Store the file
+                      await referenceImageToUpload.putFile(File(file!.path));
+                      //Success: get the download URL
+                      imageUrl = await referenceImageToUpload.getDownloadURL();
+                      // print(imageUrl);
+                    } catch (error) {
+                      //Some error occurred
+                    }
+                  },
+                  icon: Icon(Icons.camera_alt),
+                ),
+
                 const SizedBox(
                   height: 15,
                 ),
@@ -295,7 +340,7 @@ class _AddPlaceState extends State<AddPlace> {
                   ),
                 ),
                 !dhaka
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -318,7 +363,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !chittagong
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -341,7 +386,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !rajshahi
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -364,7 +409,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !mymensingh
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -387,7 +432,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !khulna
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -410,7 +455,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !rangpur
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -433,7 +478,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !barisal
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -456,7 +501,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !sylhet
-                    ? Text("")
+                    ? Text('')
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -483,11 +528,19 @@ class _AddPlaceState extends State<AddPlace> {
                   height: 50,
                 ),
 
+                // image
+
                 // elevated button
                 loading
                     ? Center(child: CircularProgressIndicator())
                     : Center(
                         child: customButton("Submit", () async {
+                          if (imageUrl.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Please upload an image')));
+
+                            return;
+                          }
                           setState(() {
                             loading = true;
                           });
