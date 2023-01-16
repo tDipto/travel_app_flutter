@@ -28,7 +28,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         elevation: 0,
         // ignore: prefer_const_constructors
         title: Text(
-          "Travel Guide",
+          "ট্রাভেল গাইড",
           style: const TextStyle(color: Colors.greenAccent),
         ),
         centerTitle: true,

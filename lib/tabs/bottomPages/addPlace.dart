@@ -45,15 +45,89 @@ class _AddPlaceState extends State<AddPlace> {
   TextEditingController _roadmapController = TextEditingController();
   TextEditingController _zillacontroller = TextEditingController();
 
-  List<String> divison = ["Dhaka", "CTG", "Raj"];
-  List<String> Dhaka = ["gazi", "tongi", "savar"];
-  List<String> CTG = ["feni", "comi", "noya"];
-  List<String> Raj = ["jsr", "magu", "go"];
+  List<String> divison = [
+    "ঢাকা",
+    "চট্টগ্রাম",
+    "রাজশাহী",
+    "খুলনা",
+    "বরিশাল",
+    "ময়মনসিংহ",
+    "রংপুর",
+    "সিলেট"
+  ];
+  List<String> Dhaka = [
+    "কিশোরগঞ্জ",
+    "গাজীপুর",
+    "টাঙ্গাইল",
+    "ফরিদপুর",
+    "নারায়ণগঞ্জ",
+    "নরসিংদী",
+    "মুন্সীগঞ্জ",
+    "ঢাকা"
+  ];
+  List<String> Chittagong = [
+    "কক্সবাজার",
+    "ফেনী",
+    "চাঁদপুর",
+    "ব্রাহ্মণবাড়িয়া",
+    "বান্দরবান",
+    "রাঙ্গামাটি",
+    "খাগড়াছড়ি",
+    "চট্টগ্রাম"
+  ];
+  List<String> Rajshahi = [
+    "বগুড়া",
+    "চাপাইনবাবগঞ্জ",
+    "জয়পুরহাট",
+    "নওগাঁ",
+    "নাটোর",
+    "রাজশাহী",
+    "পাবনা",
+    "সিরাজগঞ্জ"
+  ];
+  List<String> Khulna = [
+    "কুষ্টিয়া",
+    "চুয়াডাঙ্গা",
+    "যশোর",
+    "সাতক্ষীরা",
+    "বাগেরহাট",
+    "মাগুরা",
+    "খুলনা"
+  ];
+  List<String> Barisal = [
+    "বরগুনা",
+    "ভোলা",
+    "ঝালকাঠি",
+    "পাটুয়াখালি",
+    "পিরোজপুর",
+    "বরিশাল"
+  ];
+  List<String> Mymensingh = [
+    "নেত্রকোনা",
+    "জামালপুর",
+    "শেরপুর",
+    "ময়মনসিংহ",
+  ];
+  List<String> Rangpur = [
+    "দিনাজপুর",
+    "গাইবান্ধা",
+    "কুড়িগ্রাম",
+    "লালমনিরহাট",
+    "পঞ্চগড়",
+    "ঠাকুরগাঁও",
+    "রংপুর"
+  ];
+  List<String> Sylhet = ["হবিগঞ্জ", "মৌলভীবাজার", "সুনামগঞ্জ", "সিলেট"];
 
   bool loading = false;
   bool dhaka = false;
-  bool ctg = false;
-  bool raj = false;
+  bool chittagong = false;
+  bool rajshahi = false;
+  bool mymensingh = false;
+  bool barisal = false;
+  bool rangpur = false;
+  bool sylhet = false;
+  bool khulna = false;
 
   sendPlaceDataToDB() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -94,7 +168,7 @@ class _AddPlaceState extends State<AddPlace> {
                   height: 20,
                 ),
                 const Text(
-                  "Place ADD ",
+                  "নতুন জায়গা সংযুক্ত করুন",
                   style: TextStyle(fontSize: 22, color: Colors.amber),
                 ),
                 // const Text(
@@ -108,9 +182,9 @@ class _AddPlaceState extends State<AddPlace> {
                   height: 15,
                 ),
                 myTextField(
-                    "Place Name", TextInputType.text, _placeNameController),
+                    "জায়গার নাম", TextInputType.text, _placeNameController),
                 myTextField(
-                    "description", TextInputType.text, _descriptionController),
+                    "বর্ণনা", TextInputType.text, _descriptionController),
                 // TextField(
                 //   controller: _dobController,
                 //   readOnly: true,
@@ -122,13 +196,12 @@ class _AddPlaceState extends State<AddPlace> {
                 //     // ),
                 //   ),
                 // ),
-                myTextField(
-                    "Road Map ", TextInputType.text, _roadmapController),
+                myTextField("রোডম্যাপ", TextInputType.text, _roadmapController),
                 TextField(
                   controller: _divisonController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: "Division",
+                    hintText: "বিভাগ",
                     prefixIcon: DropdownButton<String>(
                       items: divison.map((String value) {
                         return DropdownMenuItem<String>(
@@ -138,18 +211,80 @@ class _AddPlaceState extends State<AddPlace> {
                             setState(() {
                               _divisonController.text = value;
                               // Text(value);
-                              if (_divisonController.text == 'Dhaka') {
+                              if (_divisonController.text == "ঢাকা") {
                                 dhaka = true;
-                                ctg = false;
-                                raj = false;
-                              } else if (_divisonController.text == 'CTG') {
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text ==
+                                  "চট্টগ্রাম") {
                                 dhaka = false;
-                                ctg = true;
-                                raj = false;
-                              } else if (_divisonController.text == 'Raj') {
+                                chittagong = true;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text == "রাজশাহী") {
                                 dhaka = false;
-                                ctg = false;
-                                raj = true;
+                                chittagong = false;
+                                rajshahi = true;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text == "রংপুর") {
+                                dhaka = false;
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = true;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text ==
+                                  "ময়মনসিংহ") {
+                                dhaka = false;
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = true;
+                                sylhet = false;
+                              } else if (_divisonController.text == "খুলনা") {
+                                dhaka = false;
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = true;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text == "বরিশাল") {
+                                dhaka = false;
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = true;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = false;
+                              } else if (_divisonController.text == "সিলেট") {
+                                dhaka = false;
+                                chittagong = false;
+                                rajshahi = false;
+                                khulna = false;
+                                barisal = false;
+                                rangpur = false;
+                                mymensingh = false;
+                                sylhet = true;
                               }
                             });
                           },
@@ -165,7 +300,7 @@ class _AddPlaceState extends State<AddPlace> {
                         controller: _zillacontroller,
                         readOnly: true,
                         decoration: InputDecoration(
-                          hintText: "Zilla",
+                          hintText: "জেলা",
                           prefixIcon: DropdownButton<String>(
                             items: Dhaka.map((String value) {
                               return DropdownMenuItem<String>(
@@ -182,15 +317,15 @@ class _AddPlaceState extends State<AddPlace> {
                           ),
                         ),
                       ),
-                !ctg
+                !chittagong
                     ? Text("")
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
                         decoration: InputDecoration(
-                          hintText: "Zilla",
+                          hintText: "জেলা",
                           prefixIcon: DropdownButton<String>(
-                            items: CTG.map((String value) {
+                            items: Chittagong.map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
@@ -205,15 +340,130 @@ class _AddPlaceState extends State<AddPlace> {
                           ),
                         ),
                       ),
-                !raj
+                !rajshahi
                     ? Text("")
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
                         decoration: InputDecoration(
-                          hintText: "Zilla",
+                          hintText: "জেলা",
                           prefixIcon: DropdownButton<String>(
-                            items: Raj.map((String value) {
+                            items: Rajshahi.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                                onTap: () {
+                                  setState(() {
+                                    _zillacontroller.text = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ),
+                !mymensingh
+                    ? Text("")
+                    : TextField(
+                        controller: _zillacontroller,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "জেলা",
+                          prefixIcon: DropdownButton<String>(
+                            items: Mymensingh.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                                onTap: () {
+                                  setState(() {
+                                    _zillacontroller.text = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ),
+                !khulna
+                    ? Text("")
+                    : TextField(
+                        controller: _zillacontroller,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "জেলা",
+                          prefixIcon: DropdownButton<String>(
+                            items: Khulna.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                                onTap: () {
+                                  setState(() {
+                                    _zillacontroller.text = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ),
+                !rangpur
+                    ? Text("")
+                    : TextField(
+                        controller: _zillacontroller,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "জেলা",
+                          prefixIcon: DropdownButton<String>(
+                            items: Rangpur.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                                onTap: () {
+                                  setState(() {
+                                    _zillacontroller.text = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ),
+                !barisal
+                    ? Text("")
+                    : TextField(
+                        controller: _zillacontroller,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "জেলা",
+                          prefixIcon: DropdownButton<String>(
+                            items: Barisal.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                                onTap: () {
+                                  setState(() {
+                                    _zillacontroller.text = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ),
+                      ),
+                !sylhet
+                    ? Text("")
+                    : TextField(
+                        controller: _zillacontroller,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "জেলা",
+                          prefixIcon: DropdownButton<String>(
+                            items: Sylhet.map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: new Text(value),
