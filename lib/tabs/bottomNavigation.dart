@@ -15,7 +15,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   final _pages = [
     const HomePage(),
     const DivisionPage(),
-    const AddPlace(),
+    AddPlace(),
     const ProfilePage(),
   ];
   var _currentIndex = 0;

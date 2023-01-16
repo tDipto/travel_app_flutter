@@ -30,7 +30,7 @@ class _WelcomeSplashState extends State<WelcomeSplash> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              Text("আপনাকে স্বাগতম",
+              Text("স্বাগতম",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
