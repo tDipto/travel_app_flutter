@@ -134,6 +134,8 @@ class _AddPlaceState extends State<AddPlace> {
   bool sylhet = false;
   bool khulna = false;
 
+  // User information
+
   sendPlaceDataToDB() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
