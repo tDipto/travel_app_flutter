@@ -4,6 +4,8 @@ import 'package:travel_app/tabs/bottomPages/divisionPage.dart';
 import 'package:travel_app/tabs/bottomPages/homePage.dart';
 import 'package:travel_app/tabs/bottomPages/profilePage.dart';
 
+import 'bottomPages/maindivision.dart';
+
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   final _pages = [
     const HomePage(),
-    const DivisionPage(),
+    MainDivisionPage(),
     AddPlace(),
     const ProfilePage(),
   ];
