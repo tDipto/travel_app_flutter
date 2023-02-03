@@ -56,6 +56,7 @@ class _UserFormState extends State<UserForm> {
     return _collectionRef.doc(currentUser!.email).set({
       "name": _nameController.text,
       "phone": _phoneController.text,
+      "email": currentUser.email,
       // "dob": _dobController.text,
       "gender": _genderController.text,
       "age": _ageController.text,
@@ -143,6 +144,15 @@ class _UserFormState extends State<UserForm> {
                     ? Center(child: CircularProgressIndicator())
                     : Center(
                         child: customButton("চালিয়ে যান", () async {
+                          if (_nameController.text == '' ||
+                              _phoneController.text == '' ||
+                              _genderController.text == '' ||
+                              _ageController.text == '') {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Please Fill the Fields')));
+
+                            return;
+                          }
                           setState(() {
                             loading = true;
                           });

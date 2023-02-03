@@ -49,6 +49,31 @@ class _AddPlaceState extends State<AddPlace> {
   TextEditingController _roadmapController = TextEditingController();
   TextEditingController _zillacontroller = TextEditingController();
   String imageUrl = '';
+  late File _image;
+  String _uploadedImageURL = '';
+
+  Future<void> _pickImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = File(image!.path); // won't have any error now
+    });
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) {
+      return;
+    }
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference reference =
+        FirebaseStorage.instance.ref().child('addPlaceImages/$fileName');
+    UploadTask uploadTask = reference.putFile(_image);
+    TaskSnapshot storageTaskSnapshot = await uploadTask;
+    String downloadURL = await storageTaskSnapshot.ref.getDownloadURL();
+    setState(() {
+      _uploadedImageURL = downloadURL;
+    });
+  }
 
   List<String> divison = [
     "ঢাকা",
@@ -134,8 +159,6 @@ class _AddPlaceState extends State<AddPlace> {
   bool sylhet = false;
   bool khulna = false;
 
-  // User information
-
   sendPlaceDataToDB() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
@@ -150,7 +173,7 @@ class _AddPlaceState extends State<AddPlace> {
       "divison": _divisonController.text,
       "zilla": _zillacontroller.text,
       "roadmap": _roadmapController.text,
-      "img": imageUrl
+      "img": _uploadedImageURL
     }).then((value) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => BottomNavigation()));
@@ -186,43 +209,55 @@ class _AddPlaceState extends State<AddPlace> {
                 //     color: Color(0xFFBBBBBB),
                 //   ),
                 // ),
+                /// before image
+                // IconButton(
+                //   onPressed: () async {
+                //     ImagePicker imagePicker = ImagePicker();
+                //     XFile? file = await imagePicker.pickImage(
+                //         source: ImageSource.gallery);
+                //     print('${file?.path}');
+
+                //     if (file == null) return;
+                //     //Import dart:core
+                //     String uniqueFileName =
+                //         DateTime.now().millisecondsSinceEpoch.toString();
+
+                //     /*Step 2: Upload to Firebase storage*/
+                //     //Install firebase_storage
+                //     //Import the library
+
+                //     //Get a reference to storage root
+                //     Reference referenceRoot = FirebaseStorage.instance.ref();
+                //     Reference referenceDirImages =
+                //         referenceRoot.child('addPlaceImages');
+
+                //     //Create a reference for the image to be stored
+                //     Reference referenceImageToUpload =
+                //         referenceDirImages.child(uniqueFileName);
+
+                //     //Handle errors/success
+                //     try {
+                //       //Store the file
+                //       await referenceImageToUpload.putFile(File(file!.path));
+                //       //Success: get the download URL
+                //       imageUrl = await referenceImageToUpload.getDownloadURL();
+                //       // print(imageUrl);
+                //     } catch (error) {
+                //       //Some error occurred
+                //     }
+                //   },
+                //   icon: Icon(Icons.camera_alt),
+                // ),
+
+                // after image
+
                 IconButton(
-                  onPressed: () async {
-                    ImagePicker imagePicker = ImagePicker();
-                    XFile? file = await imagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    print('${file?.path}');
-
-                    if (file == null) return;
-                    //Import dart:core
-                    String uniqueFileName =
-                        DateTime.now().millisecondsSinceEpoch.toString();
-
-                    /*Step 2: Upload to Firebase storage*/
-                    //Install firebase_storage
-                    //Import the library
-
-                    //Get a reference to storage root
-                    Reference referenceRoot = FirebaseStorage.instance.ref();
-                    Reference referenceDirImages =
-                        referenceRoot.child('addPlaceImages');
-
-                    //Create a reference for the image to be stored
-                    Reference referenceImageToUpload =
-                        referenceDirImages.child(uniqueFileName);
-
-                    //Handle errors/success
-                    try {
-                      //Store the file
-                      await referenceImageToUpload.putFile(File(file!.path));
-                      //Success: get the download URL
-                      imageUrl = await referenceImageToUpload.getDownloadURL();
-                      // print(imageUrl);
-                    } catch (error) {
-                      //Some error occurred
-                    }
-                  },
+                  onPressed: _pickImage,
                   icon: Icon(Icons.camera_alt),
+                ),
+                IconButton(
+                  onPressed: _uploadImage,
+                  icon: Icon(Icons.add_link),
                 ),
 
                 const SizedBox(
@@ -342,7 +377,7 @@ class _AddPlaceState extends State<AddPlace> {
                   ),
                 ),
                 !dhaka
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -365,7 +400,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !chittagong
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -388,7 +423,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !rajshahi
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -411,7 +446,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !mymensingh
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -434,7 +469,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !khulna
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -457,7 +492,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !rangpur
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -480,7 +515,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !barisal
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -503,7 +538,7 @@ class _AddPlaceState extends State<AddPlace> {
                         ),
                       ),
                 !sylhet
-                    ? Text('')
+                    ? Container()
                     : TextField(
                         controller: _zillacontroller,
                         readOnly: true,
@@ -536,8 +571,9 @@ class _AddPlaceState extends State<AddPlace> {
                 loading
                     ? Center(child: CircularProgressIndicator())
                     : Center(
-                        child: customButton("Submit", () async {
-                          if (imageUrl.isEmpty) {
+                        child: customButton("সাবমিট", () async {
+                          // _uploadImage();
+                          if (_uploadedImageURL.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text('Please upload an image')));
 

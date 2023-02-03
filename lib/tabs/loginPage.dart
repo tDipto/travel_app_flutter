@@ -271,9 +271,19 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 56.h,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // setState(() {
-                                    //   loading = true;
-                                    // });
+                                    if (_emailController.text == '' ||
+                                        _passwordController.text == '') {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Please Fill the Fields')));
+
+                                      return;
+                                    }
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    loading = true;
                                     signIn();
                                   },
                                   // ignore: sort_child_properties_last

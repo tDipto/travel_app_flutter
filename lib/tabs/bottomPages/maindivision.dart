@@ -9,32 +9,34 @@ class MainDivisionPage extends StatefulWidget {
 }
 
 class _MainDivisionPageState extends State<MainDivisionPage> {
-  List _mdivisions = ['ঢাকা', 'চট্টগ্রাম', 'রাজশাহী'];
+  List _mdivisions = [
+    'ঢাকা',
+    'চট্টগ্রাম',
+    'রাজশাহী',
+    "রংপুর",
+    "খুলনা",
+    "বরিশাল",
+    "সিলেট",
+    "ময়মনসিংহ"
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: (
-        Column(children: [
-          Expanded(
-            child: GridView.builder(
-              scrollDirection: Axis.horizontal,
+    return SafeArea(
+        child: Scaffold(
+      body: (Center(
+          child: ListView.builder(
               itemCount: _mdivisions.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2), 
-              itemBuilder: (_, index){
-              return GestureDetector(
-                onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>DivisionPage(_mdivisions[index]))),
-                child: Card(
-                  elevation: 3,
-                  child: Column(children: [
-                    Text("${_mdivisions[index]}"),
-                    
-                  ]),
-                ),
-              );
-            }) 
-          )
-        ])
-      )
-    );
+              itemBuilder: (context, index) {
+                return InkWell(
+                  child: ListTile(
+                    title: Text(_mdivisions[index]),
+                  ),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => DivisionPage(_mdivisions[index]))),
+                );
+              }))),
+    ));
   }
 }

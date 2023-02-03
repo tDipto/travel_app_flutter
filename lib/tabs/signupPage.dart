@@ -267,6 +267,15 @@ class _SignupPageState extends State<SignupPage> {
                                 height: 56.h,
                                 child: ElevatedButton(
                                   onPressed: () async {
+                                    if (_emailController.text == '' ||
+                                        _passwordController.text == '') {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Please Fill the Fields')));
+
+                                      return;
+                                    }
                                     // setState(() {
                                     //   loading = true;
                                     // });

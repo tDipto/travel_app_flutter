@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/tabs/bottomPages/mainzillapage.dart';
-import 'package:flutter/src/widgets/binding.dart';
 
 class DivisionPage extends StatefulWidget {
   //const DivisionPage({Key? key}) : super(key: key);
@@ -15,7 +12,8 @@ class DivisionPage extends StatefulWidget {
 }
 
 class _DivisionPageState extends State<DivisionPage> {
-  List <String> _Dhaka = [
+  List<String> currentdivison = [];
+  List<String> Dhaka = [
     "কিশোরগঞ্জ",
     "গাজীপুর",
     "টাঙ্গাইল",
@@ -45,6 +43,39 @@ class _DivisionPageState extends State<DivisionPage> {
     "পাবনা",
     "সিরাজগঞ্জ"
   ];
+  List<String> Khulna = [
+    "কুষ্টিয়া",
+    "চুয়াডাঙ্গা",
+    "যশোর",
+    "সাতক্ষীরা",
+    "বাগেরহাট",
+    "মাগুরা",
+    "খুলনা"
+  ];
+  List<String> Barisal = [
+    "বরগুনা",
+    "ভোলা",
+    "ঝালকাঠি",
+    "পাটুয়াখালি",
+    "পিরোজপুর",
+    "বরিশাল"
+  ];
+  List<String> Mymensingh = [
+    "নেত্রকোনা",
+    "জামালপুর",
+    "শেরপুর",
+    "ময়মনসিংহ",
+  ];
+  List<String> Rangpur = [
+    "দিনাজপুর",
+    "গাইবান্ধা",
+    "কুড়িগ্রাম",
+    "লালমনিরহাট",
+    "পঞ্চগড়",
+    "ঠাকুরগাঁও",
+    "রংপুর"
+  ];
+  List<String> Sylhet = ["হবিগঞ্জ", "মৌলভীবাজার", "সুনামগঞ্জ", "সিলেট"];
 
   // fetchDivision1()async{
   //   var _firestoreInstance = FirebaseFirestore.instance;
@@ -73,7 +104,35 @@ class _DivisionPageState extends State<DivisionPage> {
   void initState() {
     // fetchDivision1();
     // fetchProducts();
+    checkdivision(widget._divisons);
     super.initState();
+  }
+
+  void checkdivision(_divisons) {
+    if (_divisons == "ঢাকা") {
+      currentdivison = Dhaka;
+    }
+    if (_divisons == "চট্টগ্রাম") {
+      currentdivison = Chittagong;
+    }
+    if (_divisons == "রাজশাহী") {
+      currentdivison = Rajshahi;
+    }
+    if (_divisons == "খুলনা") {
+      currentdivison = Khulna;
+    }
+    if (_divisons == "বরিশাল") {
+      currentdivison = Barisal;
+    }
+    if (_divisons == "ময়মনসিংহ") {
+      currentdivison = Mymensingh;
+    }
+    if (_divisons == "রংপুর") {
+      currentdivison = Rangpur;
+    }
+    if (_divisons == "সিলেট") {
+      currentdivison = Sylhet;
+    }
   }
 
   @override
@@ -81,128 +140,124 @@ class _DivisionPageState extends State<DivisionPage> {
     //print(widget._divisons);
     return SafeArea(
       child: Scaffold(
-          body: (
-            
-            Center(child: 
-            ListView.builder(
-              itemCount: _Dhaka.length,
-              itemBuilder: (context,index){
-                return InkWell(
-                  child: ListTile(
-                    title: Text(_Dhaka[index]),
-                  ),
-                  onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(_Dhaka[index]))),
-                );
-              }
-            ) 
-            )
-    
-        
-        //mainAxisAlignment: MainAxisAlignment.center,
-          
-          // if (widget._divisons == "চট্টগ্রাম") ...[
-          //   Column(children: [
-          //   Expanded(
-          //   child: Center(child:
-          //   ListView.builder(
-          //     itemCount: Chittagong.length,
-          //     itemBuilder: (context,index){
-          //       return InkWell(
-          //         child: ListTile(
-          //           title: Text(Chittagong[index]),
-          //         ),
-          //         onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
-          //       );
-          //     }
-          //   ) 
-          //   )
-          //   )
-          //   ])
-          // ],
-    
-    
-    
-            
-    
-           
-        //   Column(
-        // //mainAxisAlignment: MainAxisAlignment.center,
-        // children: [
-        //   //if (widget._divisons == "ঢাকা") ...[
-        //     Column(children: [
-        //       Expanded(
-        //           child: Center(child:
-        //     ListView.builder(
-        //       itemCount: _Dhaka.length,
-        //       itemBuilder: (context,index){
-        //         return InkWell(
-        //           child: ListTile(
-        //             title: Text(_Dhaka[index]),
-        //           ),
-        //           onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(_Dhaka[index]))),
-        //         );
-        //       }
-        //     ) 
-        //     )
-        //               )
-        //     ])
-        //   ],
-          // if (widget._divisons=="চট্টগ্রাম") ...[
-      //     //   Column(children: [
-      //     //       Expanded(
-      //     //         child: GridView.builder(
-      //     //           scrollDirection: Axis.horizontal,
-      //     //           itemCount: Chittagong.length,
-      //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      //     //           itemBuilder: (_, index){
-      //     //           return GestureDetector(
-      //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
-      //     //             child: Card(
-      //     //               elevation: 3,
-      //     //               child: Column(children: [
-      //     //                 Text("${Chittagong[index]}"),
-    
-      //     //               ]),
-      //     //             ),
-      //     //           );
-      //     //         })
-      //     //       )
-      //     //     ])
-      //     // ],
-      //     // if (widget._divisons=="চট্টগ্রাম") ...[
-      //     //   Column(children: [
-      //     //       Expanded(
-      //     //         child: GridView.builder(
-      //     //           scrollDirection: Axis.horizontal,
-      //     //           itemCount: Rajshahi.length,
-      //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      //     //           itemBuilder: (_, index){
-      //     //           return GestureDetector(
-      //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Rajshahi[index]))),
-      //     //             child: Card(
-      //     //               elevation: 3,
-      //     //               child: Column(children: [
-      //     //                 Text("${Rajshahi[index]}"),
-    
-      //     //               ]),
-      //     //             ),
-      //     //           );
-      //     //         })
-      //     //       )
-      //     //     ])
-      //     // ]
-      //     // else ...[
-      //     //   const Icon(
-      //     //     Icons.comment,
-      //     //     size: 100,
-      //     //     color: Colors.black,
-      //     //   )
-      //     // ]
-      //   ],
-      // )
-      //)
-          )
-      ),
+          appBar: AppBar(
+            title: Text(widget._divisons),
+          ),
+          body: (Center(
+                  child: ListView.builder(
+                      itemCount: currentdivison.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          child: ListTile(
+                            title: Text(currentdivison[index]),
+                          ),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      MyzillaPage(currentdivison[index]))),
+                        );
+                      }))
+
+              //mainAxisAlignment: MainAxisAlignment.center,
+
+              // if (widget._divisons == "চট্টগ্রাম") ...[
+              //   Column(children: [
+              //   Expanded(
+              //   child: Center(child:
+              //   ListView.builder(
+              //     itemCount: Chittagong.length,
+              //     itemBuilder: (context,index){
+              //       return InkWell(
+              //         child: ListTile(
+              //           title: Text(Chittagong[index]),
+              //         ),
+              //         onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
+              //       );
+              //     }
+              //   )
+              //   )
+              //   )
+              //   ])
+              // ],
+
+              //   Column(
+              // //mainAxisAlignment: MainAxisAlignment.center,
+              // children: [
+              //   //if (widget._divisons == "ঢাকা") ...[
+              //     Column(children: [
+              //       Expanded(
+              //           child: Center(child:
+              //     ListView.builder(
+              //       itemCount: _Dhaka.length,
+              //       itemBuilder: (context,index){
+              //         return InkWell(
+              //           child: ListTile(
+              //             title: Text(_Dhaka[index]),
+              //           ),
+              //           onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(_Dhaka[index]))),
+              //         );
+              //       }
+              //     )
+              //     )
+              //               )
+              //     ])
+              //   ],
+              // if (widget._divisons=="চট্টগ্রাম") ...[
+              //     //   Column(children: [
+              //     //       Expanded(
+              //     //         child: GridView.builder(
+              //     //           scrollDirection: Axis.horizontal,
+              //     //           itemCount: Chittagong.length,
+              //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              //     //           itemBuilder: (_, index){
+              //     //           return GestureDetector(
+              //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
+              //     //             child: Card(
+              //     //               elevation: 3,
+              //     //               child: Column(children: [
+              //     //                 Text("${Chittagong[index]}"),
+
+              //     //               ]),
+              //     //             ),
+              //     //           );
+              //     //         })
+              //     //       )
+              //     //     ])
+              //     // ],
+              //     // if (widget._divisons=="চট্টগ্রাম") ...[
+              //     //   Column(children: [
+              //     //       Expanded(
+              //     //         child: GridView.builder(
+              //     //           scrollDirection: Axis.horizontal,
+              //     //           itemCount: Rajshahi.length,
+              //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              //     //           itemBuilder: (_, index){
+              //     //           return GestureDetector(
+              //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Rajshahi[index]))),
+              //     //             child: Card(
+              //     //               elevation: 3,
+              //     //               child: Column(children: [
+              //     //                 Text("${Rajshahi[index]}"),
+
+              //     //               ]),
+              //     //             ),
+              //     //           );
+              //     //         })
+              //     //       )
+              //     //     ])
+              //     // ]
+              //     // else ...[
+              //     //   const Icon(
+              //     //     Icons.comment,
+              //     //     size: 100,
+              //     //     color: Colors.black,
+              //     //   )
+              //     // ]
+              //   ],
+              // )
+              //)
+              )),
     );
   }
 }
