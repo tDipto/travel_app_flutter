@@ -60,6 +60,7 @@ class _UserFormState extends State<UserForm> {
       // "dob": _dobController.text,
       "gender": _genderController.text,
       "age": _ageController.text,
+      "admin": "no"
     }).then((value) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => BottomNavigation()));

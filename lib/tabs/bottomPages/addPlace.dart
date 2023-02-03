@@ -51,6 +51,7 @@ class _AddPlaceState extends State<AddPlace> {
   String imageUrl = '';
   late File _image;
   String _uploadedImageURL = '';
+  bool not_admin = true;
 
   Future<void> _pickImage() async {
     ImagePicker imagePicker = ImagePicker();
@@ -149,7 +150,8 @@ class _AddPlaceState extends State<AddPlace> {
   ];
   List<String> Sylhet = ["হবিগঞ্জ", "মৌলভীবাজার", "সুনামগঞ্জ", "সিলেট"];
 
-  bool loading = false;
+  bool loading = true;
+
   bool dhaka = false;
   bool chittagong = false;
   bool rajshahi = false;
@@ -158,6 +160,41 @@ class _AddPlaceState extends State<AddPlace> {
   bool rangpur = false;
   bool sylhet = false;
   bool khulna = false;
+
+  List _profile = [];
+  fetchProfile() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    // final Firestore _firestore = Firestore.instance;
+
+    var currentUser = _auth.currentUser;
+    var _firestoreInstance = FirebaseFirestore.instance;
+    QuerySnapshot qn =
+        await _firestoreInstance.collection('users-form-data').get();
+    setState(() {
+      print("object");
+
+      for (int i = 0; i < qn.docs.length; i++) {
+        print(qn.docs[i]["email"]);
+        print(currentUser!.email);
+        if (qn.docs[i]["email"] == currentUser!.email) {
+          _profile.add({
+            "age": qn.docs[i]["age"],
+            "gender": qn.docs[i]["gender"],
+            "name": qn.docs[i]["name"],
+            "phone": qn.docs[i]["phone"],
+            "email": qn.docs[i]["email"],
+            "admin": qn.docs[i]["admin"]
+          });
+          setState(() {
+            loading = false;
+          });
+        }
+      }
+    });
+    print(_profile);
+
+    return qn.docs;
+  }
 
   sendPlaceDataToDB() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -185,413 +222,440 @@ class _AddPlaceState extends State<AddPlace> {
   }
 
   @override
+  void initState() {
+    fetchProfile();
+    // print(_profile);
+    // setState(() {
+    //   loading = false;
+    // });
+    // fetchProducts();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "নতুন জায়গা সংযুক্ত করুন",
-                  style: TextStyle(fontSize: 22, color: Colors.amber),
-                ),
-                // const Text(
-                //   "আপনার তথ্য সংরক্ষিত থাকবে",
-                //   style: TextStyle(
-                //     fontSize: 14,
-                //     color: Color(0xFFBBBBBB),
-                //   ),
-                // ),
-                /// before image
-                // IconButton(
-                //   onPressed: () async {
-                //     ImagePicker imagePicker = ImagePicker();
-                //     XFile? file = await imagePicker.pickImage(
-                //         source: ImageSource.gallery);
-                //     print('${file?.path}');
+        child: loading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : _profile[0]["admin"] == 'no'
+                ? Container(
+                    child: Center(child: Text("Sorry Not an admin")),
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(20),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Text(
+                            "নতুন জায়গা সংযুক্ত করুন",
+                            style: TextStyle(fontSize: 22, color: Colors.amber),
+                          ),
+                          // const Text(
+                          //   "আপনার তথ্য সংরক্ষিত থাকবে",
+                          //   style: TextStyle(
+                          //     fontSize: 14,
+                          //     color: Color(0xFFBBBBBB),
+                          //   ),
+                          // ),
+                          /// before image
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     ImagePicker imagePicker = ImagePicker();
+                          //     XFile? file = await imagePicker.pickImage(
+                          //         source: ImageSource.gallery);
+                          //     print('${file?.path}');
 
-                //     if (file == null) return;
-                //     //Import dart:core
-                //     String uniqueFileName =
-                //         DateTime.now().millisecondsSinceEpoch.toString();
+                          //     if (file == null) return;
+                          //     //Import dart:core
+                          //     String uniqueFileName =
+                          //         DateTime.now().millisecondsSinceEpoch.toString();
 
-                //     /*Step 2: Upload to Firebase storage*/
-                //     //Install firebase_storage
-                //     //Import the library
+                          //     /*Step 2: Upload to Firebase storage*/
+                          //     //Install firebase_storage
+                          //     //Import the library
 
-                //     //Get a reference to storage root
-                //     Reference referenceRoot = FirebaseStorage.instance.ref();
-                //     Reference referenceDirImages =
-                //         referenceRoot.child('addPlaceImages');
+                          //     //Get a reference to storage root
+                          //     Reference referenceRoot = FirebaseStorage.instance.ref();
+                          //     Reference referenceDirImages =
+                          //         referenceRoot.child('addPlaceImages');
 
-                //     //Create a reference for the image to be stored
-                //     Reference referenceImageToUpload =
-                //         referenceDirImages.child(uniqueFileName);
+                          //     //Create a reference for the image to be stored
+                          //     Reference referenceImageToUpload =
+                          //         referenceDirImages.child(uniqueFileName);
 
-                //     //Handle errors/success
-                //     try {
-                //       //Store the file
-                //       await referenceImageToUpload.putFile(File(file!.path));
-                //       //Success: get the download URL
-                //       imageUrl = await referenceImageToUpload.getDownloadURL();
-                //       // print(imageUrl);
-                //     } catch (error) {
-                //       //Some error occurred
-                //     }
-                //   },
-                //   icon: Icon(Icons.camera_alt),
-                // ),
+                          //     //Handle errors/success
+                          //     try {
+                          //       //Store the file
+                          //       await referenceImageToUpload.putFile(File(file!.path));
+                          //       //Success: get the download URL
+                          //       imageUrl = await referenceImageToUpload.getDownloadURL();
+                          //       // print(imageUrl);
+                          //     } catch (error) {
+                          //       //Some error occurred
+                          //     }
+                          //   },
+                          //   icon: Icon(Icons.camera_alt),
+                          // ),
 
-                // after image
+                          // after image
 
-                IconButton(
-                  onPressed: _pickImage,
-                  icon: Icon(Icons.camera_alt),
-                ),
-                IconButton(
-                  onPressed: _uploadImage,
-                  icon: Icon(Icons.add_link),
-                ),
+                          IconButton(
+                            onPressed: _pickImage,
+                            icon: Icon(Icons.camera_alt),
+                          ),
+                          IconButton(
+                            onPressed: _uploadImage,
+                            icon: Icon(Icons.add_link),
+                          ),
 
-                const SizedBox(
-                  height: 15,
-                ),
-                myTextField(
-                    "জায়গার নাম", TextInputType.text, _placeNameController),
-                myTextField(
-                    "বর্ণনা", TextInputType.text, _descriptionController),
-                // TextField(
-                //   controller: _dobController,
-                //   readOnly: true,
-                //   decoration: InputDecoration(
-                //     hintText: "date of birth",
-                //     // suffixIcon: IconButton(
-                //     //   onPressed: () => _selectDateFromPicker(context),
-                //     //   icon: Icon(Icons.calendar_today_outlined),
-                //     // ),
-                //   ),
-                // ),
-                myTextField("রোডম্যাপ", TextInputType.text, _roadmapController),
-                TextField(
-                  controller: _divisonController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    hintText: "বিভাগ",
-                    prefixIcon: DropdownButton<String>(
-                      items: divison.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: new Text(value),
-                          onTap: () {
-                            setState(() {
-                              _divisonController.text = value;
-                              // Text(value);
-                              if (_divisonController.text == "ঢাকা") {
-                                dhaka = true;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text ==
-                                  "চট্টগ্রাম") {
-                                dhaka = false;
-                                chittagong = true;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text == "রাজশাহী") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = true;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text == "রংপুর") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = true;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text ==
-                                  "ময়মনসিংহ") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = true;
-                                sylhet = false;
-                              } else if (_divisonController.text == "খুলনা") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = true;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text == "বরিশাল") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = true;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = false;
-                              } else if (_divisonController.text == "সিলেট") {
-                                dhaka = false;
-                                chittagong = false;
-                                rajshahi = false;
-                                khulna = false;
-                                barisal = false;
-                                rangpur = false;
-                                mymensingh = false;
-                                sylhet = true;
-                              }
-                            });
-                          },
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          myTextField("জায়গার নাম", TextInputType.text,
+                              _placeNameController),
+                          myTextField("বর্ণনা", TextInputType.text,
+                              _descriptionController),
+                          // TextField(
+                          //   controller: _dobController,
+                          //   readOnly: true,
+                          //   decoration: InputDecoration(
+                          //     hintText: "date of birth",
+                          //     // suffixIcon: IconButton(
+                          //     //   onPressed: () => _selectDateFromPicker(context),
+                          //     //   icon: Icon(Icons.calendar_today_outlined),
+                          //     // ),
+                          //   ),
+                          // ),
+                          myTextField("রোডম্যাপ", TextInputType.text,
+                              _roadmapController),
+                          TextField(
+                            controller: _divisonController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              hintText: "বিভাগ",
+                              prefixIcon: DropdownButton<String>(
+                                items: divison.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                    onTap: () {
+                                      setState(() {
+                                        _divisonController.text = value;
+                                        // Text(value);
+                                        if (_divisonController.text == "ঢাকা") {
+                                          dhaka = true;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "চট্টগ্রাম") {
+                                          dhaka = false;
+                                          chittagong = true;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "রাজশাহী") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = true;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "রংপুর") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = true;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "ময়মনসিংহ") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = true;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "খুলনা") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = true;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "বরিশাল") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = true;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = false;
+                                        } else if (_divisonController.text ==
+                                            "সিলেট") {
+                                          dhaka = false;
+                                          chittagong = false;
+                                          rajshahi = false;
+                                          khulna = false;
+                                          barisal = false;
+                                          rangpur = false;
+                                          mymensingh = false;
+                                          sylhet = true;
+                                        }
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                                onChanged: (_) {},
+                              ),
+                            ),
+                          ),
+                          !dhaka
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Dhaka.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !chittagong
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Chittagong.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !rajshahi
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Rajshahi.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !mymensingh
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Mymensingh.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !khulna
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Khulna.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !rangpur
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Rangpur.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !barisal
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Barisal.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                          !sylhet
+                              ? Container()
+                              : TextField(
+                                  controller: _zillacontroller,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    hintText: "জেলা",
+                                    prefixIcon: DropdownButton<String>(
+                                      items: Sylhet.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                          onTap: () {
+                                            setState(() {
+                                              _zillacontroller.text = value;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+
+                          SizedBox(
+                            height: 50,
+                          ),
+
+                          // image
+
+                          // elevated button
+                          loading
+                              ? Center(child: CircularProgressIndicator())
+                              : Center(
+                                  child: customButton("সাবমিট", () async {
+                                    // _uploadImage();
+                                    if (_uploadedImageURL.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Please upload an image')));
+
+                                      return;
+                                    }
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    sendPlaceDataToDB();
+                                    // setState(() {
+                                    //   loading = false;
+                                    // });
+                                  }),
+                                ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                !dhaka
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Dhaka.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !chittagong
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Chittagong.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !rajshahi
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Rajshahi.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !mymensingh
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Mymensingh.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !khulna
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Khulna.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !rangpur
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Rangpur.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !barisal
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Barisal.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                !sylhet
-                    ? Container()
-                    : TextField(
-                        controller: _zillacontroller,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: "জেলা",
-                          prefixIcon: DropdownButton<String>(
-                            items: Sylhet.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                                onTap: () {
-                                  setState(() {
-                                    _zillacontroller.text = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-
-                SizedBox(
-                  height: 50,
-                ),
-
-                // image
-
-                // elevated button
-                loading
-                    ? Center(child: CircularProgressIndicator())
-                    : Center(
-                        child: customButton("সাবমিট", () async {
-                          // _uploadImage();
-                          if (_uploadedImageURL.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('Please upload an image')));
-
-                            return;
-                          }
-                          setState(() {
-                            loading = true;
-                          });
-                          sendPlaceDataToDB();
-                          // setState(() {
-                          //   loading = false;
-                          // });
-                        }),
-                      ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

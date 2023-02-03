@@ -33,7 +33,6 @@ Widget customButton(String buttonText, onPressed) {
 class Placeshow extends StatefulWidget {
   var _place;
   Placeshow(this._place);
-
   @override
   State<Placeshow> createState() => _PlaceshowState();
 }
@@ -42,8 +41,40 @@ class _PlaceshowState extends State<Placeshow> {
   TextEditingController _commentController = TextEditingController();
   bool loading = false;
   List user = [];
+  List _comment = [];
+  List _profile = [];
+  int _selectedRating = 0;
 
-  fetchDivision1() async {
+  // fetchComment() async {
+  //   var _firestoreInstance = FirebaseFirestore.instance;
+  //   QuerySnapshot qn = await _firestoreInstance.collection(widget._place).get();
+  //   setState(() {
+  //     // print(qn.docs[0]["comment"][0]['rating']);
+  //     for (int i = 0; i < qn.docs.length; i++) {
+  //       // int total_rating = 0;
+  //       // var avg_rating = qn.docs[i]["comment"].map((i) {
+  //       //   int rating = i["rating"];
+  //       //   return total_rating = total_rating + rating;
+  //       // });
+  //       // if (avg_rating?.length >= 1) {
+  //       //   avg_rating = int.parse(avg_rating[1]);
+  //       // }
+  //       // avg_rating = int.parse(avg_rating[1]);
+  //       // print(avg_rating);
+  //       _comment.add({
+  //         "c_description": qn.docs[i]["description"],
+  //         "c_email": qn.docs[i]["email"],
+  //         "c_rating": qn.docs[i]["rating"],
+  //         // "rating": avg_rating
+  //       });
+  //       // total_rating = 0;
+  //     }
+  //   });
+
+  //   return qn.docs;
+  // }
+
+  fetchProfile() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     // final Firestore _firestore = Firestore.instance;
 
@@ -52,17 +83,27 @@ class _PlaceshowState extends State<Placeshow> {
     QuerySnapshot qn =
         await _firestoreInstance.collection('users-form-data').get();
     setState(() {
+      // print("object");
+
       for (int i = 0; i < qn.docs.length; i++) {
-        if (qn == currentUser!.email) {
-          user.add({
-            "age": qn.docs[0]["age"],
-            "gender": qn.docs[0]["gender"],
-            "name": qn.docs[0]["name"],
-            "phone": qn.docs[0]["phone"],
+        // print(qn.docs[i]["email"]);
+        // print(currentUser!.email);
+        if (qn.docs[i]["email"] == currentUser!.email) {
+          _profile.add({
+            "age": qn.docs[i]["age"],
+            "gender": qn.docs[i]["gender"],
+            "name": qn.docs[i]["name"],
+            "phone": qn.docs[i]["phone"],
+            "email": qn.docs[i]["email"],
+            //"comment":qn.docs[i]["comment"],
+          });
+          setState(() {
+            loading = false;
           });
         }
       }
     });
+    // print(_profile);
 
     return qn.docs;
   }
@@ -87,9 +128,10 @@ class _PlaceshowState extends State<Placeshow> {
         .update({
       'comment': FieldValue.arrayUnion([
         {
-          // "name": user[0]["name"],
+          // "name": _profile[0]["name"],
           "email": currentUser!.email,
-          'description': _commentController.text
+          'description': _commentController.text,
+          "rating": _selectedRating
         },
       ]),
     }).then(
@@ -118,70 +160,127 @@ class _PlaceshowState extends State<Placeshow> {
   }
 
   @override
+  void initState() {
+    fetchProfile();
+    print(widget._place['descriptionComment']);
+    print(widget._place['rating']);
+    print(widget._place['emails']);
+
+    // setState(() {
+    //   loading = false;
+    // });
+    //fetchComment();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget._place['zilla']),
+          title: Text(widget._place['placeName']),
         ),
         body: SafeArea(
-          child: Column(
-            children: [
-              Text(widget._place['placeName']),
-              Text(widget._place['roadmap']),
-              Text(widget._place['zilla']),
-              Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      "কমেন্ট করুন",
-                      style: TextStyle(fontSize: 22, color: Colors.amber),
-                    ),
-                    // const Text(
-                    //   "আপনার তথ্য সংরক্ষিত থাকবে",
-                    //   style: TextStyle(
-                    //     fontSize: 14,
-                    //     color: Color(0xFFBBBBBB),
-                    //   ),
-                    // ),
-
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    // myTextField(
-                    //     "জায়গার নাম", TextInputType.text, _placeNameController),
-                    myTextField(
-                        "বর্ণনা", TextInputType.text, _commentController),
-                    // TextField(
-                    //   controller: _dobController,
-                    //   readOnly: true,
-                    //   decoration: InputDecoration(
-                    //     hintText: "date of birth",
-                    //     // suffixIcon: IconButton(
-                    //     //   onPressed: () => _selectDateFromPicker(context),
-                    //     //   icon: Icon(Icons.calendar_today_outlined),
-                    //     // ),
-                    //   ),
-                    // ),,
-                    loading
-                        ? Center(child: CircularProgressIndicator())
-                        : Center(
-                            child: customButton("Submit", () async {
-                              // setState(() {
-                              //   loading = true;
-                              // });
-                              sendPlaceDataToDB();
-                              // setState(() {
-                              //   loading = false;
-                              // });
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  // Expanded(
+                  //     child: ListView.builder(
+                  //   itemCount: widget._place.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return ListTile(
+                  //       title: Text("${widget._place[index]['comment']}"),
+                  //     );
+                  //   },
+                  // )),
+                  //Text(widget._place['placeName'],style: TextStyle(fontSize: 25),),
+                  Image.network(widget._place["img"]),
+                  Text(widget._place['description']),
+                  Text(widget._place['description']),
+                  //Text(widget._place['zilla']),
+                  Text(
+                    "Road Map",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  Text(widget._place['roadmap']),
+                  Container(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          "কমেন্ট করুন",
+                          style: TextStyle(fontSize: 22, color: Colors.amber),
+                        ),
+                        Container(
+                          child: Row(
+                            children: List.generate(5, (index) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedRating = index + 1;
+                                  });
+                                },
+                                child: Icon(
+                                  _selectedRating != null &&
+                                          _selectedRating > index
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Colors.yellow,
+                                ),
+                              );
                             }),
                           ),
-                  ]))
-            ],
+                        ),
+                        // const Text(
+                        //   "আপনার তথ্য সংরক্ষিত থাকবে",
+                        //   style: TextStyle(
+                        //     fontSize: 14,
+                        //     color: Color(0xFFBBBBBB),
+                        //   ),
+                        // ),
+
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        // myTextField(
+                        //     "জায়গার নাম", TextInputType.text, _placeNameController),
+                        myTextField(
+                            "বর্ণনা", TextInputType.text, _commentController),
+                        // TextField(
+                        //   controller: _dobController,
+                        //   readOnly: true,
+                        //   decoration: InputDecoration(
+                        //     hintText: "date of birth",
+                        //     // suffixIcon: IconButton(
+                        //     //   onPressed: () => _selectDateFromPicker(context),
+                        //     //   icon: Icon(Icons.calendar_today_outlined),
+                        //     // ),
+                        //   ),
+                        // ),,
+                        loading
+                            ? Center(child: CircularProgressIndicator())
+                            : Center(
+                                child: customButton("Submit", () async {
+                                  // setState(() {
+                                  //   loading = true;
+                                  // });
+                                  sendPlaceDataToDB();
+                                  // setState(() {
+                                  //   loading = false;
+                                  // });
+                                }),
+                              ),
+                      ]))
+                ],
+              ),
+            ),
           ),
         ),
 

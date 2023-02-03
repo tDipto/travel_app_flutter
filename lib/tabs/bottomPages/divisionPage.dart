@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/tabs/bottomPages/mainzillapage.dart';
+import 'package:travel_app/tabs/bottomPages/placeshow.dart';
 
 class DivisionPage extends StatefulWidget {
   //const DivisionPage({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class DivisionPage extends StatefulWidget {
 }
 
 class _DivisionPageState extends State<DivisionPage> {
+  List _divisions = [];
   List<String> currentdivison = [];
   List<String> Dhaka = [
     "কিশোরগঞ্জ",
@@ -77,34 +80,34 @@ class _DivisionPageState extends State<DivisionPage> {
   ];
   List<String> Sylhet = ["হবিগঞ্জ", "মৌলভীবাজার", "সুনামগঞ্জ", "সিলেট"];
 
-  // fetchDivision1()async{
-  //   var _firestoreInstance = FirebaseFirestore.instance;
-  //   QuerySnapshot qn =
-  //       await _firestoreInstance.collection("ফরিদপুর").get();
-  //       setState(() {
-  //     for (int i = 0; i < qn.docs.length; i++) {
-  //       _divisions.add(
-  //        {
-  //         "description": qn.docs[i]["description"],
-  //         "divison": qn.docs[i]["divison"],
-  //         "img": qn.docs[i]["img"],
-  //         "placeName": qn.docs[i]["placeName"],
-  //         "roadmap": qn.docs[i]["roadmap"],
-  //         "zilla": qn.docs[i]["zilla"],
-  //        }
+  fetchDivision1() async {
+    var _firestoreInstance = FirebaseFirestore.instance;
 
-  //       );
-  //     }
-  //   });
+    for (int i = 0; i < currentdivison.length; i++) {
+      QuerySnapshot qn =
+          await _firestoreInstance.collection(currentdivison[i]).get();
+      setState(() {
+        for (int i = 0; i < qn.docs.length; i++) {
+          _divisions.add({
+            "description": qn.docs[i]["description"],
+            "divison": qn.docs[i]["divison"],
+            "img": qn.docs[i]["img"],
+            "placeName": qn.docs[i]["placeName"],
+            "roadmap": qn.docs[i]["roadmap"],
+            "zilla": qn.docs[i]["zilla"],
+          });
+        }
+      });
+    }
 
-  //   return qn.docs;
-  // }
+    // return qn.docs;
+  }
 
   @override
   void initState() {
-    // fetchDivision1();
-    // fetchProducts();
     checkdivision(widget._divisons);
+    fetchDivision1();
+    // fetchProducts();
     super.initState();
   }
 
@@ -141,11 +144,19 @@ class _DivisionPageState extends State<DivisionPage> {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.greenAccent,
             title: Text(widget._divisons),
           ),
-          body: (Center(
+          body: SafeArea(
+              child: Column(
+            children: [
+              Expanded(
+                child: (Center(
+                    child: Container(
+                  color: Color.fromARGB(255, 237, 244, 234),
                   child: ListView.builder(
                       itemCount: currentdivison.length,
+                      // scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return InkWell(
                           child: ListTile(
@@ -157,107 +168,68 @@ class _DivisionPageState extends State<DivisionPage> {
                                   builder: (_) =>
                                       MyzillaPage(currentdivison[index]))),
                         );
+                      }),
+                ))),
+              ),
+              Text('দর্শনীয় স্থান ->'),
+              Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _divisions.length,
+                      //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
+                      itemBuilder: (_, index) {
+                        return GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        Placeshow(_divisions[index]))),
+                            child: Card(
+                              elevation: 4.0,
+                              margin: EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      _divisions[index]["img"],
+                                      width: 300.0,
+                                      height: 200.0,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                    Text(
+                                      "${_divisions[index]["placeName"]}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        // height: 6.5,
+                                      ),
+                                    ),
+                                    // Text(
+                                    //     "${_divisions[index]["description"]?.substring(0, 20)}"),
+                                    // Text("${_divisions[index]["roadmap"]}"),
+                                    // Text("${_divisions[index]["rating"]}"),
+                                  ],
+                                ),
+                              ),
+                            )
+                            //     Card(
+                            //   elevation: 3,
+                            //   child: Column(children: [
+                            //     Image.network(_divisions[index]["img"]),
+                            //     Text("${_divisions[index]["placeName"]}"),
+                            //     Text("${_divisions[index]["description"]}"),
+                            //     Text("${_divisions[index]["roadmap"]}"),
+                            //     Text("${_divisions[index]["rating"]}"),
+                            //   ]),
+                            // ),
+                            );
                       }))
-
-              //mainAxisAlignment: MainAxisAlignment.center,
-
-              // if (widget._divisons == "চট্টগ্রাম") ...[
-              //   Column(children: [
-              //   Expanded(
-              //   child: Center(child:
-              //   ListView.builder(
-              //     itemCount: Chittagong.length,
-              //     itemBuilder: (context,index){
-              //       return InkWell(
-              //         child: ListTile(
-              //           title: Text(Chittagong[index]),
-              //         ),
-              //         onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
-              //       );
-              //     }
-              //   )
-              //   )
-              //   )
-              //   ])
-              // ],
-
-              //   Column(
-              // //mainAxisAlignment: MainAxisAlignment.center,
-              // children: [
-              //   //if (widget._divisons == "ঢাকা") ...[
-              //     Column(children: [
-              //       Expanded(
-              //           child: Center(child:
-              //     ListView.builder(
-              //       itemCount: _Dhaka.length,
-              //       itemBuilder: (context,index){
-              //         return InkWell(
-              //           child: ListTile(
-              //             title: Text(_Dhaka[index]),
-              //           ),
-              //           onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(_Dhaka[index]))),
-              //         );
-              //       }
-              //     )
-              //     )
-              //               )
-              //     ])
-              //   ],
-              // if (widget._divisons=="চট্টগ্রাম") ...[
-              //     //   Column(children: [
-              //     //       Expanded(
-              //     //         child: GridView.builder(
-              //     //           scrollDirection: Axis.horizontal,
-              //     //           itemCount: Chittagong.length,
-              //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              //     //           itemBuilder: (_, index){
-              //     //           return GestureDetector(
-              //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Chittagong[index]))),
-              //     //             child: Card(
-              //     //               elevation: 3,
-              //     //               child: Column(children: [
-              //     //                 Text("${Chittagong[index]}"),
-
-              //     //               ]),
-              //     //             ),
-              //     //           );
-              //     //         })
-              //     //       )
-              //     //     ])
-              //     // ],
-              //     // if (widget._divisons=="চট্টগ্রাম") ...[
-              //     //   Column(children: [
-              //     //       Expanded(
-              //     //         child: GridView.builder(
-              //     //           scrollDirection: Axis.horizontal,
-              //     //           itemCount: Rajshahi.length,
-              //     //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              //     //           itemBuilder: (_, index){
-              //     //           return GestureDetector(
-              //     //             onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (_)=>MyzillaPage(Rajshahi[index]))),
-              //     //             child: Card(
-              //     //               elevation: 3,
-              //     //               child: Column(children: [
-              //     //                 Text("${Rajshahi[index]}"),
-
-              //     //               ]),
-              //     //             ),
-              //     //           );
-              //     //         })
-              //     //       )
-              //     //     ])
-              //     // ]
-              //     // else ...[
-              //     //   const Icon(
-              //     //     Icons.comment,
-              //     //     size: 100,
-              //     //     color: Colors.black,
-              //     //   )
-              //     // ]
-              //   ],
-              // )
-              //)
-              )),
+            ],
+          ))),
     );
   }
 }
