@@ -13,7 +13,7 @@ class MyzillaPage extends StatefulWidget {
 
 class _DivisionPageState extends State<MyzillaPage> {
   List _divisions = [];
-  double avg = 0;
+
   fetchDivision1() async {
     var _firestoreInstance = FirebaseFirestore.instance;
     QuerySnapshot qn = await _firestoreInstance.collection(widget._zilla).get();
@@ -23,13 +23,13 @@ class _DivisionPageState extends State<MyzillaPage> {
         List<String> descriptionComment = [];
         List<int> rating = [];
         List<String> emails = [];
-
-        for (int j = 0; j < qn.docs[i]["comment"].length; j++) {
+        double avg = 0;
+        for (int j = 0; j < qn.docs[i]["comment"]?.length; j++) {
           // print(qn.docs[i]["comment"].length);
           String temp = qn.docs[i]["comment"][j]["description"];
           descriptionComment.add(temp);
         }
-        for (int j = 0; j < qn.docs[i]["comment"].length; j++) {
+        for (int j = 0; j < qn.docs[i]["comment"]?.length; j++) {
           // print(qn.docs[i]["comment"].length);
           int temp = qn.docs[i]["comment"][j]["rating"];
           avg += temp;
@@ -38,7 +38,7 @@ class _DivisionPageState extends State<MyzillaPage> {
         avg /= qn.docs[i]["comment"].length;
         print(avg);
 
-        for (int j = 0; j < qn.docs[i]["comment"].length; j++) {
+        for (int j = 0; j < qn.docs[i]["comment"]?.length; j++) {
           // print(qn.docs[i]["comment"].length);
           String temp = qn.docs[i]["comment"][j]["email"];
           emails.add(temp);
@@ -58,12 +58,12 @@ class _DivisionPageState extends State<MyzillaPage> {
           "zilla": qn.docs[i]["zilla"],
           "descriptionComment": descriptionComment,
           "rating": rating,
-          "emails": emails
+          "emails": emails,
+          "avg": avg
         });
         // total_rating = 0;
-
+        avg = 0;
       }
-      avg = 0;
     });
 
     return qn.docs;
@@ -122,8 +122,9 @@ class _DivisionPageState extends State<MyzillaPage> {
                                       // height: 6.5,
                                     ),
                                   ),
+
                                   Text(
-                                    "${avg}",
+                                    "Rating : ${_divisions[index]["avg"]}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       // height: 6.5,
