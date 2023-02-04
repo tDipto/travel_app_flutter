@@ -205,7 +205,13 @@ class _DivisionPageState extends State<DivisionPage> {
                       }),
                 ))),
               ),
-              Text('দর্শনীয় স্থান ->'),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'দর্শনীয় স্থান',
+                style: TextStyle(fontSize: 18),
+              ),
               Expanded(
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -243,6 +249,35 @@ class _DivisionPageState extends State<DivisionPage> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         // height: 6.5,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          Text("রেটিং"),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            child: Row(
+                                              children: List.generate(5, (p) {
+                                                return InkWell(
+                                                  onTap: () {},
+                                                  child: Icon(
+                                                    _divisions[index]['avg'] !=
+                                                                null &&
+                                                            _divisions[index]
+                                                                    ['avg'] >
+                                                                p
+                                                        ? Icons.star
+                                                        : Icons.star_border,
+                                                    color: Colors.greenAccent,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     // Text(

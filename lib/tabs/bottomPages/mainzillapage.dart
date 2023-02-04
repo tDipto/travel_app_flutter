@@ -123,12 +123,18 @@ class _DivisionPageState extends State<MyzillaPage> {
                                     height: 200.0,
                                     fit: BoxFit.fitWidth,
                                   ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
                                   Text(
                                     "${_divisions[index]["placeName"]}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       // height: 6.5,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
                                   ),
 
                                   Container(

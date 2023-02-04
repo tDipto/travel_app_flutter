@@ -218,7 +218,13 @@ class _MainDivisionPageState extends State<MainDivisionPage> {
                     }),
               ),
             ),
-            Text('দর্শনীয় স্থান ->'),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'দর্শনীয় স্থান',
+              style: TextStyle(fontSize: 16),
+            ),
             Expanded(
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -231,38 +237,73 @@ class _MainDivisionPageState extends State<MainDivisionPage> {
                               MaterialPageRoute(
                                   builder: (_) =>
                                       Placeshow(_divisions[index]))),
-                          child: Card(
-                            elevation: 4.0,
-                            margin: EdgeInsets.all(8.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Image.network(
-                                    _divisions[index]["img"],
-                                    width: 300.0,
-                                    height: 200.0,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "${_divisions[index]["placeName"]}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      // height: 6.5,
+                          child: SingleChildScrollView(
+                            child: Card(
+                              elevation: 4.0,
+                              margin: EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      _divisions[index]["img"],
+                                      width: 300.0,
+                                      height: 200.0,
+                                      fit: BoxFit.fitWidth,
                                     ),
-                                  ),
-                                  // Text(
-                                  //     "${_divisions[index]["description"]?.substring(0, 20)}"),
-                                  // Text("${_divisions[index]["roadmap"]}"),
-                                  // Text("${_divisions[index]["rating"]}"),
-                                ],
+                                    // const SizedBox(
+                                    //   height: 4,
+                                    // ),
+                                    Text(
+                                      "${_divisions[index]["placeName"]}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        // height: 6.5,
+                                      ),
+                                    ),
+                                    // const SizedBox(
+                                    //   height: 4,
+                                    // ),
+
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          Text("রেটিং"),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            child: Row(
+                                              children: List.generate(5, (p) {
+                                                return InkWell(
+                                                  onTap: () {},
+                                                  child: Icon(
+                                                    _divisions[index]['avg'] !=
+                                                                null &&
+                                                            _divisions[index]
+                                                                    ['avg'] >
+                                                                p
+                                                        ? Icons.star
+                                                        : Icons.star_border,
+                                                    color: Colors.greenAccent,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Text(
+                                    //     "${_divisions[index]["description"]?.substring(0, 20)}"),
+                                    // Text("${_divisions[index]["roadmap"]}"),
+                                    // Text("${_divisions[index]["rating"]}"),
+                                  ],
+                                ),
                               ),
                             ),
                           )
