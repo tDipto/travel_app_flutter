@@ -206,8 +206,16 @@ class _MainDivisionPageState extends State<MainDivisionPage> {
                     itemCount: _mdivisions.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        child: ListTile(
-                          title: Text(_mdivisions[index]),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color.fromARGB(255, 234, 226, 226),
+                              width: 1,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(_mdivisions[index]),
+                          ),
                         ),
                         onTap: () => Navigator.push(
                             context,

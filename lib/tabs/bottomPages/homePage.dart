@@ -54,72 +54,76 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          // Container(
-          //   height: 300.0,
-            
-          // ),
-          Container(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                loading
-              ? CircularProgressIndicator()
-              : AspectRatio(
-                  aspectRatio: 1.2,
-                  child: CarouselSlider(
-                      items: _carouselImages
-                          .map((item) => Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 3, right: 3),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(item),
-                                          fit: BoxFit.fitWidth)),
-                                ),
-                              ))
-                          .toList(),
-                      options: CarouselOptions(
-                          autoPlay: false,
-                          enlargeCenterPage: true,
-                          viewportFraction: 0.8,
-                          enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          onPageChanged: (val, carouselPageChangedReason) {
-                            setState(() {
-                              _dotPosition = val;
-                            });
-                          })),
-                ),
-                Text(
-                  'Discover new destinations',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: <Widget>[
+            // Container(
+            //   height: 300.0,
+              
+            // ),
+            Container(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                children: <Widget>[
+                  loading
+                ? CircularProgressIndicator()
+                : AspectRatio(
+                    aspectRatio: 1.2,
+                    child: CarouselSlider(
+                        items: _carouselImages
+                            .map((item) => Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 3, right: 3),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(item),
+                                            fit: BoxFit.fitWidth)),
+                                  ),
+                                ))
+                            .toList(),
+                        options: CarouselOptions(
+                            autoPlay: false,
+                            enlargeCenterPage: true,
+                            viewportFraction: 0.8,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            onPageChanged: (val, carouselPageChangedReason) {
+                              setState(() {
+                                _dotPosition = val;
+                              });
+                            })),
                   ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Card(
-                  elevation: 4,
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'ভ্রমণ কার না ভালো লাগে? আর এই ভ্রমণ যদি হয় কোনপ্রকার ভোগান্তি ছাড়া তখন যেন বাঁধভাঙ্গা আনন্দ-উল্লাসে মেতে উঠে আমাদের মনপ্রাণ। ভ্রমণের এই ভোগান্তিকে কমানোর জন্যই আমরা নিয়ে এসেছি আমাদের এই ট্রাভেল অ্যাপ । এখানে আপনারা পাবেন ট্রাভেল বিষয়ক যাবতীয় তথ্য যার মাধ্যমে আপনি ঘুরতে যেতেন পারবেন দেশের বিভিন্ন দর্শনীয় স্থানে । ট্রাভেল অ্যাপের পক্ষে থেকে আপনাকে স্বাগতম ।'
-                      ,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 17.5,
+                  Text(
+                    'ভ্রমণ পিপাসুর ভ্রমণস্থান অনুসন্ধান',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.greenAccent
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'ভ্রমণ কার না ভালো লাগে? আর এই ভ্রমণ যদি হয় কোনপ্রকার ভোগান্তি ছাড়া তখন যেন বাঁধভাঙ্গা আনন্দ-উল্লাসে মেতে উঠে আমাদের মনপ্রাণ। ভ্রমণের এই ভোগান্তিকে কমানোর জন্যই আমরা নিয়ে এসেছি আমাদের এই ট্রাভেল অ্যাপ । এখানে আপনারা পাবেন ট্রাভেল বিষয়ক যাবতীয় তথ্য যার মাধ্যমে আপনি ঘুরতে যেতেন পারবেন দেশের বিভিন্ন দর্শনীয় স্থানে । ট্রাভেল অ্যাপের পক্ষে থেকে আপনাকে স্বাগতম ।'
+                        ,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 17.5,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

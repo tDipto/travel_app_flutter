@@ -219,8 +219,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Expanded(
                               child: TextField(
+
                                 controller: _passwordController,
-                                // obscureText: _obscureText,
+                                 obscureText: _obscureText,
                                 decoration: InputDecoration(
                                   hintText:
                                       "পাসওয়ার্ড কমপক্ষে ৬ শব্দের হতে হবে ",

@@ -257,7 +257,7 @@ class _PlaceshowState extends State<Placeshow> {
                     itemBuilder: (_, index) {
                       return ListTile(
                         leading: Icon(Icons.people),
-                        title: Text(widget._place['emails'][index]),
+                        title: Text(widget._place['emails'][index],style:TextStyle(fontSize: 12),),
                         subtitle: Text(
                             '${widget._place['descriptionComment'][index]}'),
 
@@ -276,6 +276,7 @@ class _PlaceshowState extends State<Placeshow> {
                                               return InkWell(
                                                 onTap: () {},
                                                 child: Icon(
+                                                  size:12,
                                                   widget._place['rating'][index] !=
                                                               null &&
                                                           widget._place['rating']

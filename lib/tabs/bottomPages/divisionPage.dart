@@ -193,8 +193,16 @@ class _DivisionPageState extends State<DivisionPage> {
                       // scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          child: ListTile(
-                            title: Text(currentdivison[index]),
+                          child: Container(
+                            decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color.fromARGB(255, 234, 226, 226),
+                              width: 1,
+                            ),
+                          ),
+                            child: ListTile(
+                              title: Text(currentdivison[index]),
+                            ),
                           ),
                           onTap: () => Navigator.push(
                               context,

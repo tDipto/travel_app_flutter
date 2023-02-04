@@ -26,12 +26,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.greenAccent,
         elevation: 0,
         // ignore: prefer_const_constructors
         title: Text(
           "ট্রাভেল গাইড",
-          style: const TextStyle(color: Colors.greenAccent),
+          style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
