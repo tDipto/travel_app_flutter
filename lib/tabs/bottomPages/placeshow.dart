@@ -14,16 +14,16 @@ Widget myTextField(String hintText, keyBoardType, controller) {
 
 Widget customButton(String buttonText, onPressed) {
   return SizedBox(
-    width: 300,
-    height: 56,
+    width: 150,
+    height: 40,
     child: ElevatedButton(
       onPressed: onPressed,
       child: Text(
-        buttonText,
+        'কমেন্ট',
         style: TextStyle(color: Colors.white, fontSize: 18),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.amber,
+        backgroundColor: Colors.greenAccent,
         elevation: 3,
       ),
     ),
@@ -179,6 +179,7 @@ class _PlaceshowState extends State<Placeshow> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget._place['placeName']),
+          backgroundColor: Colors.greenAccent,
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -188,6 +189,25 @@ class _PlaceshowState extends State<Placeshow> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
+                  Card(
+                    //elevation: 50,
+                    shadowColor: Colors.black,
+                    color: Colors.greenAccent[100],
+                    child: Image.network(widget._place["img"]),
+                  ),
+                  //Text("Description of the Place",selectionColor: Colors.greenAccent,textDirection: TextDirection.ltr,),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Container(
+                        color: Colors.white,
+                        child: Text(widget._place['description']),
+                      ),
+                    ),
+                    //elevation: 50,
+                    shadowColor: Colors.black,
+                    color: Colors.white,
+                  ),
                   // Expanded(
                   //     child: ListView.builder(
                   //   itemCount: widget._place.length,
@@ -198,86 +218,173 @@ class _PlaceshowState extends State<Placeshow> {
                   //   },
                   // )),
                   //Text(widget._place['placeName'],style: TextStyle(fontSize: 25),),
-                  Image.network(widget._place["img"]),
-                  Text(widget._place['description']),
-                  Text(widget._place['description']),
-                  //Text(widget._place['zilla']),
-                  Text(
-                    "Road Map",
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  Text(widget._place['roadmap']),
-                  Container(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          "কমেন্ট করুন",
-                          style: TextStyle(fontSize: 22, color: Colors.amber),
-                        ),
-                        Container(
-                          child: Row(
-                            children: List.generate(5, (index) {
-                              return InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedRating = index + 1;
-                                  });
-                                },
-                                child: Icon(
-                                  _selectedRating != null &&
-                                          _selectedRating > index
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.yellow,
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                        // const Text(
-                        //   "আপনার তথ্য সংরক্ষিত থাকবে",
-                        //   style: TextStyle(
-                        //     fontSize: 14,
-                        //     color: Color(0xFFBBBBBB),
-                        //   ),
-                        // ),
+                  //Image.network(widget._place["img"]),
 
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        // myTextField(
-                        //     "জায়গার নাম", TextInputType.text, _placeNameController),
-                        myTextField(
-                            "বর্ণনা", TextInputType.text, _commentController),
-                        // TextField(
-                        //   controller: _dobController,
-                        //   readOnly: true,
-                        //   decoration: InputDecoration(
-                        //     hintText: "date of birth",
-                        //     // suffixIcon: IconButton(
-                        //     //   onPressed: () => _selectDateFromPicker(context),
-                        //     //   icon: Icon(Icons.calendar_today_outlined),
-                        //     // ),
-                        //   ),
-                        // ),,
-                        loading
-                            ? Center(child: CircularProgressIndicator())
-                            : Center(
-                                child: customButton("Submit", () async {
-                                  // setState(() {
-                                  //   loading = true;
-                                  // });
-                                  sendPlaceDataToDB();
-                                  // setState(() {
-                                  //   loading = false;
-                                  // });
-                                }),
-                              ),
-                      ]))
+                  //Text(widget._place['description']),
+                  //Text(widget._place['zilla']),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "রোড ম্যাপ",
+                    style: TextStyle(fontSize: 25, color: Colors.greenAccent),
+                    textAlign: TextAlign.left,
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Container(
+                        color: Colors.white,
+                        child: Text(widget._place['roadmap']),
+                      ),
+                    ),
+                    //elevation: 50,
+                    shadowColor: Colors.black,
+                    color: Colors.white,
+                  ),
+                  //Text(widget._place['roadmap']),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "রিভিউ",
+                    style: TextStyle(fontSize: 25, color: Colors.greenAccent),
+                  ),
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: widget._place['descriptionComment'].length,
+                    itemBuilder: (_, index) {
+                      return ListTile(
+                        leading: Icon(Icons.people),
+                        title: Text(widget._place['emails'][index]),
+                        subtitle: Text(
+                            '${widget._place['descriptionComment'][index]}'),
+                        //trailing: Icon(Icons.arrow_forward),
+                      );
+                    },
+                  ),
+                  //Text(widget._place['descriptionComment'][0]),
+                  // ListView.builder(
+                  // itemCount: widget._place['descriptionComment'].length,
+                  //     // scrollDirection: Axis.horizontal,
+                  //     itemBuilder: (context, index) {
+                  //       return InkWell(
+                  //         child: ListTile(
+                  //           title: Text(widget._place['descriptionComment'][index]),
+                  //         ),
+                  //         onTap: () {}
+                  //       );
+                  //     }
+
+                  // ),
+
+                  // New comment start
+
+//          @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: ListView.builder(
+//           itemCount: items.length,
+//           itemBuilder: (context, index) {
+//             return ListTile(
+//               leading: Icon(Icons.ac_unit),
+//               title: Text(items[index]),
+//               subtitle: Text('Subtitle for ${items[index]}'),
+//               trailing: Icon(Icons.arrow_forward),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+                  // New comment end
+
+                  Container(
+                      child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Text(
+                            "কমেন্ট করুন",
+                            style: TextStyle(
+                                fontSize: 22, color: Colors.greenAccent),
+                          ),
+                          Container(
+                            child: Row(
+                              children: List.generate(5, (index) {
+                                return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedRating = index + 1;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _selectedRating != null &&
+                                            _selectedRating > index
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.greenAccent,
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                          // const Text(
+                          //   "আপনার তথ্য সংরক্ষিত থাকবে",
+                          //   style: TextStyle(
+                          //     fontSize: 14,
+                          //     color: Color(0xFFBBBBBB),
+                          //   ),
+                          // ),
+
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          // myTextField(
+                          //     "জায়গার নাম", TextInputType.text, _placeNameController),
+                          // Padding(
+                          //   padding: EdgeInsets.all(20.0),
+
+                          // ),
+                          myTextField(
+                              "বর্ণনা", TextInputType.text, _commentController),
+                          // TextField(
+                          //   controller: _dobController,
+                          //   readOnly: true,
+                          //   decoration: InputDecoration(
+                          //     hintText: "date of birth",
+                          //     // suffixIcon: IconButton(
+                          //     //   onPressed: () => _selectDateFromPicker(context),
+                          //     //   icon: Icon(Icons.calendar_today_outlined),
+                          //     // ),
+                          //   ),
+                          // ),,
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          loading
+                              ? Center(child: CircularProgressIndicator())
+                              : Center(
+                                  child: customButton("Submit", () async {
+                                    // setState(() {
+                                    //   loading = true;
+                                    // });
+                                    sendPlaceDataToDB();
+                                    // setState(() {
+                                    //   loading = false;
+                                    // });
+                                  }),
+                                ),
+                        ]),
+                  ))
                 ],
               ),
             ),

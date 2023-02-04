@@ -210,7 +210,8 @@ class _AddPlaceState extends State<AddPlace> {
       "divison": _divisonController.text,
       "zilla": _zillacontroller.text,
       "roadmap": _roadmapController.text,
-      "img": _uploadedImageURL
+      "img": _uploadedImageURL,
+      "comment": []
     }).then((value) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => BottomNavigation()));
@@ -230,6 +231,13 @@ class _AddPlaceState extends State<AddPlace> {
     // });
     // fetchProducts();
     super.initState();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override

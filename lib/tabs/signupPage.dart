@@ -106,7 +106,7 @@ class _SignupPageState extends State<SignupPage> {
                               TextStyle(fontSize: 22.sp, color: Colors.amber),
                         ),
                         Text(
-                          "আপনার পুনরায় ফিরে আসায় আমরা আনন্দিত!",
+                          "ভ্রমনের দুনিয়াতে আপনাকে স্বাগতম!",
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xFFBBBBBB),
