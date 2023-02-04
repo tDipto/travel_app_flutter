@@ -260,7 +260,49 @@ class _PlaceshowState extends State<Placeshow> {
                         title: Text(widget._place['emails'][index]),
                         subtitle: Text(
                             '${widget._place['descriptionComment'][index]}'),
-                        //trailing: Icon(Icons.arrow_forward),
+
+
+
+
+
+
+
+
+                        trailing: //Text('${widget._place['rating'][index]}'),
+
+                                           Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: List.generate(5, (p) {
+                                              return InkWell(
+                                                onTap: () {},
+                                                child: Icon(
+                                                  widget._place['rating'][index] !=
+                                                              null &&
+                                                          widget._place['rating']
+                                                                  [index] >
+                                                              p
+                                                      ? Icons.star
+                                                      : Icons.star_border,
+                                                  color: Colors.greenAccent,
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       );
                     },
                   ),

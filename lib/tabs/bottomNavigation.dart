@@ -15,7 +15,7 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   final _pages = [
-    const HomePage(),
+    HomePage(),
     MainDivisionPage(),
     AddPlace(),
     const ProfilePage(),
